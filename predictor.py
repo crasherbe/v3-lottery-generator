@@ -1,40 +1,17 @@
-# predictor.py
-# ---------------------------------------------------
-# File ini memberi skor pada setiap kombinasi angka
-# berdasarkan digit hot / normal / cold
-# lalu menentukan 10 angka terbaik
-# ---------------------------------------------------
+from strategy import SCORE_HOT, SCORE_NORMAL, SCORE_COLD
 
-def score_number(number, hot, cold):
-
+def score_number(num,analysis):
     score = 0
-
-    for d in number:
-
-        digit = int(d)
-
-        if digit in hot:
-            score += 3
-
-        elif digit in cold:
-            score += 1
-
+    for d in num:
+        if d in analysis["hot"]:
+            score += SCORE_HOT
+        elif d in analysis["normal"]:
+            score += SCORE_NORMAL
         else:
-            score += 2
-
+            score += SCORE_COLD
     return score
 
-
-def get_top_numbers(numbers, hot, cold, top=10):
-
-    scored = []
-
-    for n in numbers:
-
-        s = score_number(n, hot, cold)
-
-        scored.append((n, s))
-
-    scored.sort(key=lambda x: x[1], reverse=True)
-
-    return scored[:top]
+def pick_best(numbers,analysis,top=10):
+    scored = [(n,score_number(n,analysis)) for n in numbers]
+    scored.sort(key=lambda x:x[1], reverse=True)
+    return [x[0] for x in scored[:top]]
