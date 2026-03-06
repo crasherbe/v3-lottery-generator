@@ -68,10 +68,13 @@ if st.button("ANALYZE"):
     top10 = pick_best(numbers, analysis)
     
     # --------------------------
-    # Kotak 2: Hasil Generator (vertikal)
-    # --------------------------
-    st.subheader("Hasil Generator")
-    for num in numbers:
+# Kotak 2: Hasil Generator (multi-baris)
+# --------------------------
+st.subheader("Hasil Generator")
+per_row = 10  # jumlah angka per baris
+for i in range(0, len(numbers), per_row):
+    cols = st.columns(per_row)
+    for j, num in enumerate(numbers[i:i+per_row]):
         colored_num = ""
         for d in num:
             if num in top10:
@@ -82,18 +85,7 @@ if st.button("ANALYZE"):
                 colored_num += f"<span style='color:blue'>{d}</span>"
             else:
                 colored_num += f"<span style='color:gray'>{d}</span>"
-        st.markdown(colored_num, unsafe_allow_html=True)
-    
-    # --------------------------
-    # Kotak 3: Top 10 Terbaik (vertikal)
-    # --------------------------
-    st.subheader("Top 10 Angka Terbaik")
-    for n in top10:
-        colored_num = ""
-        for d in n:
-            colored_num += f"<span style='color:lime;font-weight:bold'>{d}</span>"
-        st.markdown(colored_num, unsafe_allow_html=True)
-    
+        cols[j].markdown(colored_num, unsafe_allow_html=True)
     # --------------------------
     # Kotak 4: Analisa Digit
     # --------------------------
