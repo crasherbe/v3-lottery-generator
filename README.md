@@ -1,15 +1,23 @@
-# v3-lottery-generator
-# Lottery Analyzer
+Lottery History Analyzer
 
-Web ini digunakan untuk menganalisa angka history togel.
+Fitur:
+- Digit Frequency
+- Hot Digit
+- Cold Digit
+- Normal Digit
+- Mirror Digit
+- Trend Digit
+- Skip Digit
+- Digit Pair Frequency
+- Ganjil/Genap
+- Besar/Kecil
+- Generator Kombinasi
+- Ranking Score
+- Top 10 Prediksi Angka
+- Grid Output
+- Legend Warna
+- Warning
 
-Strategi yang digunakan:
-
-- Hot Number
-- Cold Number
-- Genap / Ganjil
-- Besar / Kecil
-- Generate kombinasi dari hasil analisa
-- Ranking kombinasi
-
-Dibuat menggunakan Python + Streamlit.
+Jalankan:
+pip install -r requirements.txt
+streamlit run app.py
