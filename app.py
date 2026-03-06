@@ -8,7 +8,7 @@ st.title("LOTTERY HISTORY ANALYZER")
 st.markdown("""
 Tool ini digunakan untuk **menganalisa history angka**.
 
-Strategi yang digunakan:
+Strategi digunakan:
 
 - Digit Frequency  
 - Hot Digit  
