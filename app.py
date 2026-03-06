@@ -40,6 +40,18 @@ generate_count = st.selectbox("Jumlah Generate", [50,100,200,500])
 
 if st.button("ANALYZE"):
     history = history_text.split()
+    
+    # --------------------------
+    # Kotak 1: Tampilkan input user
+    # --------------------------
+    st.subheader("Input History User")
+    cols_input = st.columns(10)
+    for i, num in enumerate(history):
+        cols_input[i%10].markdown(f"<span style='color:black;font-weight:bold'>{num}</span>", unsafe_allow_html=True)
+    
+    # --------------------------
+    # Analisa history
+    # --------------------------
     analysis = analyze_history(history)
     
     # --------------------------
@@ -48,7 +60,6 @@ if st.button("ANALYZE"):
     numbers = []
     for _ in range(generate_count):
         combo = []
-        # Ambil hot/cold/normal/mirror/trend secara random tapi tetap dari hasil analisa
         pool = analysis["hot"]*3 + analysis["cold"]*2 + analysis["normal"] + analysis["mirror"] + analysis["trend"]
         while len(combo) < digit_count:
             combo.append(random.choice(pool))
@@ -58,7 +69,7 @@ if st.button("ANALYZE"):
     top10 = pick_best(numbers, analysis)
     
     # --------------------------
-    # Kotak 1: Hasil Generator dengan warna Top 10 sinkron
+    # Kotak 2: Hasil Generator dengan warna Top 10 sinkron
     # --------------------------
     st.subheader("Hasil Generator")
     cols = st.columns(10)
@@ -76,7 +87,7 @@ if st.button("ANALYZE"):
         cols[i%10].markdown(colored_num, unsafe_allow_html=True)
     
     # --------------------------
-    # Kotak 2: Top 10 Terbaik
+    # Kotak 3: Top 10 Terbaik
     # --------------------------
     st.subheader("Top 10 Angka Terbaik")
     top_cols = st.columns(10)
@@ -87,7 +98,7 @@ if st.button("ANALYZE"):
         top_cols[i%10].markdown(colored_num, unsafe_allow_html=True)
     
     # --------------------------
-    # Kotak 3: Analisa Digit
+    # Kotak 4: Analisa Digit
     # --------------------------
     st.subheader("Analisa Digit")
     st.markdown(f"**Digit Frequency:** {analysis['frequency']}")
