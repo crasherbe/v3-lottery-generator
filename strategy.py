@@ -1,24 +1,30 @@
-# strategy.py
-# ---------------------------------------------
-# File ini berisi aturan strategi analisa
-# Digunakan untuk filter kombinasi angka
-# ---------------------------------------------
+# ==========================================
+# STRATEGY MODULE
+# ==========================================
+# Semua aturan strategi untuk generator
+# ==========================================
 
-def odd_even_filter(number):
+# Jumlah digit dari tiap kategori
+HOT_PICK = 1
+COLD_PICK = 1
+NORMAL_PICK = 2
 
-    digits = [int(d) for d in number]
+# Skor ranking
+SCORE_HOT = 3
+SCORE_NORMAL = 2
+SCORE_COLD = 1
 
-    odd = sum(d % 2 for d in digits)
-    even = len(digits) - odd
+# Ganjil/Genap default
+ODD_EVEN_RULE = (2,2)  # contoh 2 ganjil 2 genap
 
-    return odd, even
+# Besar/Kecil default
+BIG_SMALL_RULE = (2,2)  # contoh 2 besar 2 kecil
 
+# Mirror digit mapping
+MIRROR_MAP = {
+    "0":"5", "1":"6", "2":"7", "3":"8", "4":"9",
+    "5":"0", "6":"1", "7":"2", "8":"3", "9":"4"
+}
 
-def big_small_filter(number):
-
-    digits = [int(d) for d in number]
-
-    small = sum(d <= 4 for d in digits)
-    big = len(digits) - small
-
-    return big, small
+# Last draw weight
+LAST_DRAW_WEIGHT = 2  # bobot history terakhir
