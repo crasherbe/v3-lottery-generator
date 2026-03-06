@@ -68,24 +68,36 @@ if st.button("ANALYZE"):
     top10 = pick_best(numbers, analysis)
     
     # --------------------------
-# Kotak 2: Hasil Generator (multi-baris)
-# --------------------------
-st.subheader("Hasil Generator")
-per_row = 10  # jumlah angka per baris
-for i in range(0, len(numbers), per_row):
-    cols = st.columns(per_row)
-    for j, num in enumerate(numbers[i:i+per_row]):
-        colored_num = ""
-        for d in num:
-            if num in top10:
-                colored_num += f"<span style='color:lime;font-weight:bold'>{d}</span>"
-            elif d in analysis["hot"]:
-                colored_num += f"<span style='color:red;font-weight:bold'>{d}</span>"
-            elif d in analysis["cold"]:
-                colored_num += f"<span style='color:blue'>{d}</span>"
-            else:
-                colored_num += f"<span style='color:gray'>{d}</span>"
-        cols[j].markdown(colored_num, unsafe_allow_html=True)
+    # Kotak 2: Hasil Generator (multi-baris)
+    # --------------------------
+    st.subheader("Hasil Generator")
+    per_row = 10  # angka per baris
+    for i in range(0, len(numbers), per_row):
+        cols = st.columns(per_row)
+        for j, num in enumerate(numbers[i:i+per_row]):
+            colored_num = ""
+            for d in num:
+                if num in top10:
+                    colored_num += f"<span style='color:lime;font-weight:bold'>{d}</span>"
+                elif d in analysis["hot"]:
+                    colored_num += f"<span style='color:red;font-weight:bold'>{d}</span>"
+                elif d in analysis["cold"]:
+                    colored_num += f"<span style='color:blue'>{d}</span>"
+                else:
+                    colored_num += f"<span style='color:gray'>{d}</span>"
+            cols[j].markdown(colored_num, unsafe_allow_html=True)
+    
+    # --------------------------
+    # Kotak 3: Top 10 Terbaik (multi-baris)
+    # --------------------------
+    st.subheader("Top 10 Angka Terbaik")
+    per_row = 10
+    for i in range(0, len(top10), per_row):
+        cols = st.columns(per_row)
+        for j, n in enumerate(top10[i:i+per_row]):
+            colored_num = "".join([f"<span style='color:lime;font-weight:bold'>{d}</span>" for d in n])
+            cols[j].markdown(colored_num, unsafe_allow_html=True)
+    
     # --------------------------
     # Kotak 4: Analisa Digit
     # --------------------------
