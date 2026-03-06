@@ -45,9 +45,8 @@ if st.button("ANALYZE"):
     # Kotak 1: Tampilkan input user
     # --------------------------
     st.subheader("Input History User")
-    cols_input = st.columns(10)
-    for i, num in enumerate(history):
-        cols_input[i%10].markdown(f"<span style='color:black;font-weight:bold'>{num}</span>", unsafe_allow_html=True)
+    for num in history:
+        st.markdown(f"<span style='color:black;font-weight:bold'>{num}</span>", unsafe_allow_html=True)
     
     # --------------------------
     # Analisa history
@@ -69,11 +68,10 @@ if st.button("ANALYZE"):
     top10 = pick_best(numbers, analysis)
     
     # --------------------------
-    # Kotak 2: Hasil Generator dengan warna Top 10 sinkron
+    # Kotak 2: Hasil Generator (vertikal)
     # --------------------------
     st.subheader("Hasil Generator")
-    cols = st.columns(10)
-    for i, num in enumerate(numbers):
+    for num in numbers:
         colored_num = ""
         for d in num:
             if num in top10:
@@ -84,18 +82,17 @@ if st.button("ANALYZE"):
                 colored_num += f"<span style='color:blue'>{d}</span>"
             else:
                 colored_num += f"<span style='color:gray'>{d}</span>"
-        cols[i%10].markdown(colored_num, unsafe_allow_html=True)
+        st.markdown(colored_num, unsafe_allow_html=True)
     
     # --------------------------
-    # Kotak 3: Top 10 Terbaik
+    # Kotak 3: Top 10 Terbaik (vertikal)
     # --------------------------
     st.subheader("Top 10 Angka Terbaik")
-    top_cols = st.columns(10)
-    for i,n in enumerate(top10):
+    for n in top10:
         colored_num = ""
         for d in n:
             colored_num += f"<span style='color:lime;font-weight:bold'>{d}</span>"
-        top_cols[i%10].markdown(colored_num, unsafe_allow_html=True)
+        st.markdown(colored_num, unsafe_allow_html=True)
     
     # --------------------------
     # Kotak 4: Analisa Digit
