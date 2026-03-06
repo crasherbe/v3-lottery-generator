@@ -1,78 +1,71 @@
-# app.py
-# -------------------------------------------------
-# Web interface menggunakan Streamlit
-# Menampilkan:
-# - input history
-# - analisa hot cold
-# - generator kombinasi
-# - top 10 angka terkuat
-# -------------------------------------------------
-
 import streamlit as st
-
 from analyzer import analyze_history
 from generator import generate_numbers
-from predictor import get_top_numbers
+from predictor import pick_best
 
+st.title("LOTTERY HISTORY ANALYZER")
 
-st.title("Lottery Number Analyzer")
+st.markdown("""
+Tool ini digunakan untuk **menganalisa history angka**.
 
-st.write("""
 Strategi yang digunakan:
 
-Hot Number → angka paling sering muncul
-Cold Number → angka paling jarang muncul
-Genap/Ganjil filter
-Besar/Kecil filter
-Generate kombinasi dari hasil analisa
-Ranking kombinasi
+- Digit Frequency  
+- Hot Digit  
+- Cold Digit  
+- Normal Digit  
+- Mirror Digit  
+- Trend Digit  
+- Skip Digit  
+- Digit Pair Frequency  
+- Ganjil/Genap  
+- Besar/Kecil  
+- Generate Kombinasi  
+- Ranking Score  
+- Top 10 Prediksi Angka
 """)
 
-history_input = st.text_area("Masukkan history angka (pisahkan dengan enter)")
+st.markdown("""
+### Legend Warna
+🟩 Hijau = Hot Digit  
+🟦 Biru = Cold Digit  
+⬜ Abu = Normal Digit  
+🟢 Hijau terang = Top 10 angka terbaik
+""")
 
-digits_length = st.selectbox(
-    "Pilih tipe angka",
-    [2,3,4,5]
-)
+history_text = st.text_area("Input History Angka (satu baris per angka)")
+digit_count = st.selectbox("Pilih Digit", [2,3,4,5])
+generate_count = st.selectbox("Jumlah Generate", [50,100,200,500])
 
-generate_total = st.slider(
-    "Jumlah angka generator",
-    10,
-    500,
-    100
-)
+if st.button("ANALYZE"):
+    history = history_text.split()
+    analysis = analyze_history(history)
+    numbers = generate_numbers(analysis, digit_count, generate_count)
+    top10 = pick_best(numbers, analysis)
+    
+    st.subheader("Digit Frequency")
+    st.write(analysis["frequency"])
+    st.subheader("Hot Digit")
+    st.write(analysis["hot"])
+    st.subheader("Cold Digit")
+    st.write(analysis["cold"])
+    st.subheader("Normal Digit")
+    st.write(analysis["normal"])
+    st.subheader("Mirror Digit")
+    st.write(analysis["mirror"])
+    st.subheader("Trend Digit")
+    st.write(analysis["trend"])
+    st.subheader("Skip Digit")
+    st.write(analysis["skip"])
+    st.subheader("Digit Pair Frequency")
+    st.write(analysis["pairs"])
+    
+    st.subheader("Top 10 Prediksi")
+    st.write(top10)
+    
+    st.subheader("Hasil Generator (Grid)")
+    cols = st.columns(10)
+    for i,num in enumerate(numbers):
+        cols[i%10].write(num)
 
-if st.button("Analisa dan Generate"):
-
-    history_numbers = history_input.split()
-
-    result = analyze_history(history_numbers)
-
-    hot = result["hot"]
-    cold = result["cold"]
-    normal = result["normal"]
-
-    st.write("Hot digits:", hot)
-    st.write("Cold digits:", cold)
-
-    numbers = generate_numbers(
-        generate_total,
-        digits_length,
-        hot,
-        cold,
-        normal
-    )
-
-    st.subheader("Hasil Generator")
-
-    cols = st.columns(5)
-
-    for i, num in enumerate(numbers):
-        cols[i % 5].write(num)
-
-    st.subheader("Top 10 Angka Terkuat")
-
-    top = get_top_numbers(numbers, hot, cold)
-
-    for n, s in top:
-        st.write(n, "score:", s)
+st.warning("Warning: sistem ini hanya analisa statistik dari history angka dan tidak menjamin hasil pasti keluar.")
