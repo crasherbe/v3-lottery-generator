@@ -1,46 +1,34 @@
-# generator.py
-# ----------------------------------------------------
-# File ini membuat kombinasi angka berdasarkan hasil
-# analisa history (hot / cold / normal)
-# BUKAN random dari 0-9
-# ----------------------------------------------------
-
 import random
+from strategy import HOT_PICK, COLD_PICK, NORMAL_PICK
 
-
-def generate_number(digits_length, hot, cold, normal):
-
-    digits = []
-
-    # Strategi kombinasi
-    # 1 HOT
-    # 1 COLD
-    # sisanya NORMAL
-
-    digits.append(random.choice(hot))
-    digits.append(random.choice(cold))
-
-    while len(digits) < digits_length:
-        digits.append(random.choice(normal))
-
-    random.shuffle(digits)
-
-    return "".join(map(str, digits))
-
-
-def generate_numbers(total, digits_length, hot, cold, normal):
-
+def generate_numbers(analysis, digit_count, total_count):
+    """
+    Generate kombinasi angka mengikuti strategi.
+    """
+    hot = analysis["hot"]
+    cold = analysis["cold"]
+    normal = analysis["normal"]
+    mirror = analysis["mirror"]
+    trend = analysis["trend"]
+    
     numbers = []
-
-    for _ in range(total):
-
-        num = generate_number(
-            digits_length,
-            hot,
-            cold,
-            normal
-        )
-
-        numbers.append(num)
-
+    
+    for _ in range(total_count):
+        combo = []
+        # ambil hot, cold, normal
+        if len(hot) >= HOT_PICK:
+            combo += random.sample(hot, HOT_PICK)
+        if len(cold) >= COLD_PICK:
+            combo += random.sample(cold, COLD_PICK)
+        if len(normal) >= NORMAL_PICK:
+            combo += random.sample(normal, NORMAL_PICK)
+        
+        # lengkapi digit
+        while len(combo) < digit_count:
+            options = normal + trend + mirror
+            combo.append(random.choice(options))
+        
+        random.shuffle(combo)
+        numbers.append("".join(combo))
+    
     return numbers
