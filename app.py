@@ -2,6 +2,7 @@ import streamlit as st
 from analyzer import analyze_history
 from generator import generate_numbers
 from predictor import pick_best
+import random
 
 st.title("LOTTERY HISTORY ANALYZER")
 
@@ -40,7 +41,20 @@ generate_count = st.selectbox("Jumlah Generate", [50,100,200,500])
 if st.button("ANALYZE"):
     history = history_text.split()
     analysis = analyze_history(history)
-    numbers = generate_numbers(analysis, digit_count, generate_count)
+    
+    # --------------------------
+    # Generate angka berbasis analisa
+    # --------------------------
+    numbers = []
+    for _ in range(generate_count):
+        combo = []
+        # Ambil hot/cold/normal/mirror/trend secara random tapi tetap dari hasil analisa
+        pool = analysis["hot"]*3 + analysis["cold"]*2 + analysis["normal"] + analysis["mirror"] + analysis["trend"]
+        while len(combo) < digit_count:
+            combo.append(random.choice(pool))
+        random.shuffle(combo)
+        numbers.append("".join(combo))
+    
     top10 = pick_best(numbers, analysis)
     
     # --------------------------
@@ -48,15 +62,13 @@ if st.button("ANALYZE"):
     # --------------------------
     st.subheader("Hasil Generator")
     cols = st.columns(10)
-    
     for i, num in enumerate(numbers):
         colored_num = ""
         for d in num:
             if num in top10:
-                # Top 10 → hijau terang
                 colored_num += f"<span style='color:lime;font-weight:bold'>{d}</span>"
             elif d in analysis["hot"]:
-                colored_num += f"<span style='color:red;font-weight:bold'>{d}</span>"  # hot merah
+                colored_num += f"<span style='color:red;font-weight:bold'>{d}</span>"
             elif d in analysis["cold"]:
                 colored_num += f"<span style='color:blue'>{d}</span>"
             else:
@@ -78,7 +90,6 @@ if st.button("ANALYZE"):
     # Kotak 3: Analisa Digit
     # --------------------------
     st.subheader("Analisa Digit")
-    
     st.markdown(f"**Digit Frequency:** {analysis['frequency']}")
     st.markdown(f"**Hot Digit:** {analysis['hot']}")
     st.markdown(f"**Cold Digit:** {analysis['cold']}")
